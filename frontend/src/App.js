@@ -12,6 +12,7 @@ import Cart from './components/Cart/Cart';
 import Products from './components/Products/Products';
 import UpdateProduct from './components/Products/UpdateProduct';
 import Wishlist from './components/wishlist/wishlist';
+import UpdateProfile from './components/UpdateProfile/UpdateProfile';
 function App() {
 
   return (
@@ -27,7 +28,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/products/:id/update" element={<UpdateProduct/>} />
         <Route path="/products/update" element={<UpdateProduct/>} />
-
+        <Route path="profile" element={<UpdateProfile/>}></Route>
         <Route path="/Cart" element={<Cart/>}/>
         <Route path="/Products" element={<Products/>}/>
         <Route path="/wishlist" element={<Wishlist />} />

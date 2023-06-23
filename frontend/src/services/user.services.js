@@ -34,6 +34,28 @@ const register = async(registerData)=>{
         }
     )
 }
+const updateUserInfo = async(data)=>{
+    console.log(data.id)
+    let request = {
+        first_name: data.firstname,
+        last_name: data.lastname,
+        password: data.password,
+        email: data.email
+    }
+    let token =localStorage.getItem('access');
+    const auth = {
+        headers:{Authorization:`Bearer ${token}`}
+    }
+    console.log(request)
+    return axios.put(`http://127.0.0.1:8000/users/${data.id}/`, request )
+    .then(res =>{
+        return res.status;
+    })
+    .catch(err => {
+        console.error(err)
+        return err.status
+    })
+}
 const getUser =(id) =>{
 
 }
@@ -49,5 +71,6 @@ export {
     login,
     register,
     getUser,
-    logout,IsAuthenticated
+    logout,IsAuthenticated,
+    updateUserInfo
 }
