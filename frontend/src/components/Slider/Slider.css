@@ -1,0 +1,20 @@
+.customImg {
+  width: 100%;
+  height: auto;
+}
+
+.carousel-inner {
+  height: 1000px;
+
+}
+
+.slide{
+  margin-top: 5%;
+  
+}
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .carousel-inner {
+    height: 300px; /* Adjust the height for smaller screens */
+  }
+}

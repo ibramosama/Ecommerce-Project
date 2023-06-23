@@ -1,0 +1,136 @@
+:root{
+    --head-color:#0989FF;
+    --font-family:'Roboto', sans-serif;
+    --font-login-weight:600;
+}
+.sign_form{
+    height: fit-content;
+    box-shadow: 0px 30px 70px rgba(1, 15, 28, 0.1);
+    margin: auto;
+    margin-top:3em;
+    margin-bottom: 6em;
+    box-sizing: border-box;
+    width: fit-content !important;
+    background-color: white;
+}
+.form_content{
+    margin:3em;
+}
+/* .login_from{
+    background-image: url('/public/rm222batch2-mind-03.jpg');
+} */
+.header_from{
+    text-align: center;
+    font-family: var(--font-family);
+    font-weight: var(--font-login-weight);
+    font-size: 2em;
+    margin-top: 1em;
+}
+.sign_text{
+    color:#0989FF;
+    font-weight: var(--font-login-weight);
+    cursor: pointer;
+    text-decoration: none !important;
+}
+.login_icons{
+    margin:1em;
+    text-align: center;
+
+}
+.login_icon{
+    padding:.3em;
+    padding-left: 2em;
+    padding-right: 2em;
+    text-align: center;
+    border: 1px solid #cecece;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top:.5em ;
+    margin-bottom:.5em ;
+}
+.login_icon:hover{
+    border:1px solid #474646;
+    cursor: pointer;
+}
+.login_icon i {
+    font-size: 2em;
+}
+.facebook_icon{
+    color:#0083fd;
+}
+
+
+.break_line{
+    position: relative;
+    z-index: 1;
+}
+.line_content{
+    position: relative;
+    text-align: center;
+    background-color: white;
+    bottom: 1.8em ;
+    z-index: 2;
+    width: fit-content; 
+    margin: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+    /* width: 100%; */
+}
+.form_label{
+    position: relative;
+    top:19px;
+    z-index: 2;
+    background-color: white;
+    width: fit-content;
+    display: block;
+    margin-left:2em ;
+    padding:.5em;
+    font-weight: var(--font-login-weight);
+    color:#6d6c6c
+}
+.form_input{
+    position: relative;
+    padding:1em !important;
+    z-index: 1;
+    width: 100%;
+    border: 1px solid #cecece;
+}
+.form_input:focus::placeholder{
+    visibility:hidden ;
+}
+.form_input::placeholder{
+    padding-left:1em;
+}
+.form_submit_btn{
+    width: 100%;
+    border: none;
+    padding:1em;
+    color:white;
+    background-color: #000;
+    margin-top:2em;
+    font-size: 1.1em;
+    font-family: var(--font-family);
+    font-weight: var(--font-login-weight);
+}
+.form_submit_btn:hover{
+    background-color: #0989FF;
+}
+.form_submit_btn[disabled]{
+    background-color: #bdbfc2;
+}
+.errorMsg{
+    text-align: center;
+    color: rgb(250, 57, 57);
+    font-family: var(--font-family);
+    font-size: small;
+    margin-top: 5px;
+    
+}
+.error_input{
+    position: relative;
+    padding:1em !important;
+    z-index: 1;
+    width: 100%;
+    box-shadow: 0 0 10px #b10a0a;
+    border: 1px solid #b10a0a;
+}
