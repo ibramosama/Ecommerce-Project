@@ -1,13 +1,19 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from rest_framework import generics, status, viewsets, permissions
-from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.exceptions import PermissionDenied, AuthenticationFailed
+from django.conf import settings
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.core.mail import send_mail
+from djangoProject4 import settings
+
 
 from .models import User, Product, Category, Order, CartItem, WishlistItem
 from .serializers import (
@@ -16,7 +22,7 @@ from .serializers import (
     CategorySerializer,
     OrderSerializer,
     CartItemSerializer,
-    CustomTokenObtainPairSerializer, WishlistItemSerializer,
+    CustomTokenObtainPairSerializer, WishlistItemSerializer, CategoryProductSerializer,
 )
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -110,21 +116,27 @@ class UserLoginAPIView(TokenObtainPairView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        user = serializer.user
+        if user.blocked:
+            raise AuthenticationFailed('User is blocked')  # Raise an exception if the user is blocked
+
         token = serializer.validated_data
         return Response(token, status=status.HTTP_200_OK)
 
 
+
 class ProductSearchAPIView(generics.ListAPIView):
-    serializer_class = ProductSerializer
+    serializer_class = CategoryProductSerializer
 
     def get_queryset(self):
-        search_query = self.request.GET.get('search')
+        search_query = self.request.query_params.get('search')
         queryset = Product.objects.all()
 
         if search_query:
-            queryset = queryset.filter(title__icontains=search_query)
+            queryset = queryset.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
 
-        return queryset
+        return queryset.values()
+
 
 class CartItemViewSet(viewsets.ModelViewSet):
     queryset = CartItem.objects.all()
@@ -174,6 +186,25 @@ class CartItemViewSet(viewsets.ModelViewSet):
         serializer = CartItemSerializer(cart_items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated])
+    def checkout(self, request):
+        user = request.user
+        print(user.email)
+        if user.is_authenticated:
+            cart_items = CartItem.objects.filter(user=user)
+
+            email_subject = 'Your Order'
+            email_body = f"Thank you for your order, {user.first_name}! Here are the items in your order:\n\n"
+
+            for cart_item in cart_items:
+                email_body += f"- {cart_item.product.title} - Quantity: {cart_item.quantity}\n"
+
+            send_mail(email_subject, email_body, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+            cart_items.delete()
+            return Response({'message': 'Checkout successful'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Authentication required'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class WishlistItemViewSet(viewsets.ModelViewSet):
     queryset = WishlistItem.objects.all()
@@ -218,3 +249,13 @@ class WishlistItemViewSet(viewsets.ModelViewSet):
 
 
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])  # Allow only admin users to access this view
+def block_user(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        user.blocked = True
+        user.save()
+        return Response({'message': 'User blocked successfully'})
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)

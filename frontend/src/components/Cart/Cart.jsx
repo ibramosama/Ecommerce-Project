@@ -5,7 +5,6 @@ import { UserContext } from '../../index';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
 const Cart = () => {
   const user = useContext(UserContext);
   const [cartItems, setCartItems] = useState([]);
@@ -30,6 +29,23 @@ const Cart = () => {
       console.error(error);
     }
   };
+  const accessToken =  localStorage.getItem('token');
+
+  const handleCheckout = async () => {
+    try {
+      await axios.post('http://localhost:8000/api/cart/checkout/', null, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      alert('Checkout successful');
+      setCartItems([]);
+      setTotalPrice(0);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
 
   const fetchProductDetails = async (productId) => {
     try {
@@ -75,13 +91,19 @@ const Cart = () => {
                       Remove
                     </button>
                   </div>
+
                 </div>
               </li>
+              
             ))}
           </ul>
           <div className="total-price">
             <p>Total: ${totalPrice}</p>
           </div>
+
+          <button className="checkout-btn" onClick={handleCheckout}>
+            Checkout
+          </button>
         </div>
       )}
     </div>

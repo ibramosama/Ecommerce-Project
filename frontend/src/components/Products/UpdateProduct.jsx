@@ -157,9 +157,8 @@ export default function UpdateProduct() {
   </Form.Control>
 </Form.Group>
 
-
         <Button variant='dark' type='submit'>
-          {id == 0 ? "Add Product" : "Edit Product"}
+          {!id  ? "Add Product" : "Edit Product"}
         </Button>
 
       </Form>

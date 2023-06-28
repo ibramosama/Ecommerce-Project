@@ -31,15 +31,20 @@ const Products = ({ selectedCategoryId, categoryId }) => {
       if (categoryId) {
         url = `http://localhost:8000/api/categories/${categoryId}/products/`;
       }
-      if (query) {
-        url += `${categoryId ? '&' : '?'}q=${query}`;
-      }
-      const response = await axios.get(url);
-      setProducts(response.data);
+      const params = query ? { q: query } : {};
+      const response = await axios.get(url, { params });
+      const filteredProducts = query
+        ? response.data.filter(product =>
+            product.title.toLowerCase().includes(query.toLowerCase())
+          )
+        : response.data;
+      setProducts(filteredProducts);
     } catch (error) {
       console.error(error);
     }
   };
+  
+  
 
   const handleQuickView = (product) => {
     setSelectedProduct(product);

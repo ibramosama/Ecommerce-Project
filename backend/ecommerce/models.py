@@ -44,6 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+    blocked = models.BooleanField(default=False)
 
     AUTH_USER_MODEL = 'ecommerce.User'
 
@@ -81,7 +82,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class Product(models.Model):
     title = models.CharField(max_length=255)

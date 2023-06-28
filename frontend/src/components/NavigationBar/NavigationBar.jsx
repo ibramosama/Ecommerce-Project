@@ -31,26 +31,16 @@ function NavigationBar() {
     window.location.reload();
   };
 
-  const handleSearch = async () => {
+
+  const handleSearch = () => {
     if (searchQuery) {
-      try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/products/search?search=${searchQuery}`
-        );
-        const { data } = response;
-        // Use the response data as needed
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setSearchQuery(''); // Clear the search query after performing the search
-      }
+      navigate(`/products?search=${searchQuery}`);
     }
   };
   
-
+  
   const handleAddToCart = () => {
-    setCartCount(cartCount + 1);
+    setCartCount(cartCount= + 1);
   };
   
   
@@ -72,16 +62,18 @@ function NavigationBar() {
         <div
           className={`${style.search_product} flex-fill d-none d-lg-flex d-md-flex flex-shrink justify-content-center`}
         >
-          <input
-            type="text"
-            placeholder="Search for products"
-            className={`${style.search}`}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          ></input>
-          <button className={style.search_btn} onClick={handleSearch}>
-            <i className="bi bi-search"></i>
-          </button>
+              <input
+      type="text"
+      placeholder="Search for products"
+      className={`${style.search}`}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+    ></input>
+
+        <button className={style.search_btn} onClick={handleSearch}>
+          <i className="bi bi-search"></i>
+        </button>
+
         </div>
 
         <div className="account-section d-flex align-items-center ">
@@ -159,6 +151,10 @@ function NavigationBar() {
                <Link to={`/Products`}>Products</Link>          
 
           </div>
+  <div className="flex-shrink-0 ms-3">
+            <Link to={`/profile`}>Profile</Link>          
+          </div>
+
         </div>
         <div
           className={`${style.navbar_right} d-flex align-items- justify-content-end d-none d-lg-flex`}
